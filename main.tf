@@ -1,7 +1,7 @@
 #Terraform script to deploy resource group, virtual network, and Windows server 2016 virtual machine
 
 provider "azurerm" {
-  subscription_id = "xxxx"
+  #subscription_id = "xxxx"
   version         = "=2.35.0"
   features {} 
 }
