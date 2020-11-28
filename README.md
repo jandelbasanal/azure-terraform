@@ -1,2 +1,2 @@
 # azure-terraform
-Testing Azure and Terraform to deploy IaaS
+Quick terraform script to deploy desposable Windows VM
