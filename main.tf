@@ -1,8 +1,8 @@
 #Terraform script to deploy resource group, virtual network, and Windows server 2016 virtual machine
 
 provider "azurerm" {
-  #subscription_id = "xxxx"
-  version         = "=2.35.0"
+  #subscription_id = ""
+  version          = "=2.35.0"
   features {} 
 }
 
@@ -33,9 +33,16 @@ resource "azurerm_subnet" "subnet" {
   name                 = "subnet_internal"
   resource_group_name  = azurerm_resource_group.RG.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes       = ["10.10.1.0/24"]
+  address_prefixes     = ["10.10.1.0/24"]
 }
 
+resource "azurerm_public_ip" "pubip1" {
+  name                    = "test-pip"
+  location                = azurerm_resource_group.RG.location
+  resource_group_name     = azurerm_resource_group.RG.name
+  allocation_method       = "Dynamic"
+  idle_timeout_in_minutes = 30
+}
 
 resource "azurerm_network_interface" "iface" {
   name = "nic-iface"
@@ -46,9 +53,9 @@ resource "azurerm_network_interface" "iface" {
     name                          = "iface"
     subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.pubip1.id
   }
 }
-
 
 resource "azurerm_windows_virtual_machine" "VM" {
   name                = "vm1"
@@ -70,5 +77,5 @@ resource "azurerm_windows_virtual_machine" "VM" {
     sku       = "2016-Datacenter"
     version   = "latest"
   }
-}
 
+}
